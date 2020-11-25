@@ -1,0 +1,32 @@
+{
+  "description": "Node Scraper",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/username/repository.git"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "cron": "^1.8.2",
+    "express": "latest",
+    "moment": "^2.27.0",
+    "moment-timezone": "^0.5.31",
+    "mysql": "^2.18.1",
+    "node-cron": "^2.0.3",
+    "node-crontab": "0.0.8",
+    "puppeteer": "^2.1.1",
+    "rimraf": "^3.0.2"
+  },
+  "name": "node-scraper",
+  "bugs": {
+    "url": "https://github.com/username/repository/issues"
+  },
+  "homepage": "https://github.com/username/repository#readme",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": ""
+}

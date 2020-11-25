@@ -1,0 +1,11 @@
+node_modules
+package-lock.json
+docs
+index.html
+noi.html
+log.html
+log-ballzaa.html
+memory-usage.html
+time-usage.html
+config.json
+package-lock.json

@@ -61,14 +61,14 @@ connection.connect(async function (err) {
              // getContent();
               getContent2();
             } else {
-              connection.end();
-              process.exit();
+             // connection.end();
+             // process.exit();
             }
           }
         });
       } else {
-        connection.end();
-        process.exit();
+       // connection.end();
+       // process.exit();
       }
     });
     reqOne.end();
@@ -100,7 +100,7 @@ function getContent2() {
       
       noiVinsmoke($);
     
-      await browser.close();
+    //  await browser.close();
     } else {
 
       await browser.close();
@@ -118,8 +118,6 @@ function getContent2() {
 
 // --- start get content --- //
 function getContent() {
-
-  
   
   puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
     return 'Yes, has html';

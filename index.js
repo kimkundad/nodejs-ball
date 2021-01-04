@@ -9,11 +9,7 @@ var another = require('./need-functions.js');
 
 var dbObject = require('./config.json');
 
-const express = require('express')
-const app = express()
-
 var port    = process.env.PORT || 3000;
-
 
 
 class MyEmitter extends EventEmitter { }
@@ -54,12 +50,11 @@ connection.connect(async function (err) {
             const createdAt = another.createdAt();
             await another.nvsOpenAndAppendFile('log.html', createdAt + ' : Main SELECT dir_name error DB : ' + err.message + '<br>\n');
 
-           // connection.end();
-           // process.exit();
+            connection.end();
+            process.exit();
           } else {
             if (result.length == 0) {
               getContent();
-              getContent2();
             } else {
               connection.end();
               process.exit();
@@ -76,52 +71,16 @@ connection.connect(async function (err) {
     reqOne.on('timeout', () => {
       // reqOne.abort();
 
-     // connection.end();
-    //  process.exit();
+      connection.end();
+      process.exit();
     });
     // ----- end check host ----- //
   }
 });
 
-function getContent2() {
-
-  let scrape = async () => {
-    const browser = await puppeteer.launch({headless: true});
-    const page = await browser.newPage();
-    await page.goto(url);
-    const html = await page.content();
-    await browser.close();
-
-    if (html) {
-      console.log('Yes, has html');
-      
-      const $ = cheerio.load(html);
-      
-      noiVinsmoke($);
-    
-      await browser.close();
-    } else {
-
-      await browser.close();
-    }
-    return html;
-    
-    }
-    scrape().then((value) => {
-      res.json({"foo": value});
-  });
-  
-}
-
-
-
 // --- start get content --- //
 function getContent() {
-
-  
-  
   puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
-    return 'Yes, has html';
     const page = await browser.newPage();
 
     await page.setDefaultNavigationTimeout(0);
@@ -137,15 +96,12 @@ function getContent() {
     await page.goto(url);
 
     const html = await page.content();
-   // console.log(html);
-    
-    res.json(html)
 
     if (html) {
       console.log('Yes, has html');
-      
+      console.log(html);
       const $ = cheerio.load(html);
-      
+  
       noiVinsmoke($);
 
       /*

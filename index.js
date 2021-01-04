@@ -109,7 +109,7 @@ function getContent2() {
     
     }
     scrape().then((value) => {
-      res.json({"foo": value});
+      console.log(value); // Success!
   });
   
 }

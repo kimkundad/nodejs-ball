@@ -92,13 +92,14 @@ function getContent2() {
     await page.goto(url);
     const html = await page.content();
     await browser.close();
-
+    console.log('Yes, has html');
     if (html) {
       console.log('Yes, has html');
       
       const $ = cheerio.load(html);
       
       noiVinsmoke($);
+      console.log('Yes, has html');
     
     //  await browser.close();
     } else {

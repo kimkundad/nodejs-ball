@@ -100,7 +100,7 @@ function getContent() {
     if (html) {
       console.log('Yes, has html');
       console.log(html);
-      const $ = cheerio.load(html);
+     // const $ = cheerio.load(html);
   
       noiVinsmoke($);
 

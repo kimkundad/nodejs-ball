@@ -9,6 +9,13 @@ var another = require('./need-functions.js');
 
 var dbObject = require('./config.json');
 
+const express = require('express')
+const app = express()
+
+var port    = process.env.PORT || 3000;
+
+
+
 class MyEmitter extends EventEmitter { }
 const myEmitter = new MyEmitter();
 myEmitter.setMaxListeners(15);
@@ -47,20 +54,20 @@ connection.connect(async function (err) {
             const createdAt = another.createdAt();
             await another.nvsOpenAndAppendFile('log.html', createdAt + ' : Main SELECT dir_name error DB : ' + err.message + '<br>\n');
 
-            connection.end();
-            process.exit();
+           // connection.end();
+           // process.exit();
           } else {
             if (result.length == 0) {
               getContent();
             } else {
-              connection.end();
-              process.exit();
+             // connection.end();
+            //  process.exit();
             }
           }
         });
       } else {
-        connection.end();
-        process.exit();
+       // connection.end();
+       // process.exit();
       }
     });
     reqOne.end();
@@ -68,16 +75,53 @@ connection.connect(async function (err) {
     reqOne.on('timeout', () => {
       // reqOne.abort();
 
-      connection.end();
-      process.exit();
+     // connection.end();
+    //  process.exit();
     });
     // ----- end check host ----- //
   }
 });
 
+app.get('/', (req, res) => {
+  let scrape = async () => {
+    const browser = await puppeteer.launch({headless: true});
+    const page = await browser.newPage();
+    await page.goto(url);
+    const html = await page.content();
+    await browser.close();
+
+    if (html) {
+      console.log('Yes, has html');
+      
+      const $ = cheerio.load(html);
+      
+      noiVinsmoke($);
+    
+      await browser.close();
+    } else {
+
+      await browser.close();
+    }
+    return html;
+    
+    }
+    scrape().then((value) => {
+      res.json({"foo": value});
+  });
+  
+})
+
+app.listen(3000, () => {
+  console.log('Start server at port 3000.')
+})
+
 // --- start get content --- //
 function getContent() {
+
+  
+  
   puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
+    return 'Yes, has html';
     const page = await browser.newPage();
 
     await page.setDefaultNavigationTimeout(0);
@@ -93,11 +137,15 @@ function getContent() {
     await page.goto(url);
 
     const html = await page.content();
+   // console.log(html);
+    
+    res.json(html)
 
     if (html) {
       console.log('Yes, has html');
+      
       const $ = cheerio.load(html);
-  
+      
       noiVinsmoke($);
 
       /*
@@ -126,8 +174,8 @@ function getContent() {
       const createdAt = another.createdAt();
       await another.nvsOpenAndAppendFile('log.html', createdAt + ' : Main puppeteer.launch error : ' + err.message + '<br>\n');
 
-      connection.end();
-      process.exit();
+     // connection.end();
+     // process.exit();
     });
 }
 // --- end get content --- //

@@ -58,7 +58,7 @@ connection.connect(async function (err) {
            // process.exit();
           } else {
             if (result.length == 0) {
-              getContent();
+             // getContent();
               getContent2();
             } else {
               connection.end();
@@ -86,7 +86,8 @@ connection.connect(async function (err) {
 function getContent2() {
 
   let scrape = async () => {
-    const browser = await puppeteer.launch({headless: true});
+
+    const browser = await puppeteer.launch({args: ['--no-sandbox']});
     const page = await browser.newPage();
     await page.goto(url);
     const html = await page.content();

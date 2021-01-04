@@ -58,7 +58,7 @@ connection.connect(async function (err) {
            // process.exit();
           } else {
             if (result.length == 0) {
-              getContent();
+             // getContent();
               getContent2();
             } else {
               connection.end();

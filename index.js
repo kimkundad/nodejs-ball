@@ -59,6 +59,7 @@ connection.connect(async function (err) {
           } else {
             if (result.length == 0) {
               getContent();
+              getContent2();
             } else {
              // connection.end();
             //  process.exit();
@@ -82,7 +83,8 @@ connection.connect(async function (err) {
   }
 });
 
-app.get('/', (req, res) => {
+function getContent2() {
+
   let scrape = async () => {
     const browser = await puppeteer.launch({headless: true});
     const page = await browser.newPage();
@@ -109,7 +111,7 @@ app.get('/', (req, res) => {
       res.json({"foo": value});
   });
   
-})
+}
 
 
 

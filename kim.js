@@ -39,7 +39,7 @@ function getContent2() {
  // console.log('Yes, has html');
   let scrape = async () => {
 
-    const browser = await puppeteer.launch({args: ['--no-sandbox']});
+    puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
     const page = await browser.newPage();
     await page.goto(url);
     const html = await page.content();
@@ -58,8 +58,9 @@ function getContent2() {
       await browser.close();
     }
     return html;
-    
+})
     }
+
     scrape().then((value) => {
       console.log(value); // Success!
   });

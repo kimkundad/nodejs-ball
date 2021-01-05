@@ -32,40 +32,69 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(async function (err) {
-    getContent2();
+    getContent();
 });
 
-function getContent2() {
- // console.log('Yes, has html');
-  let scrape = async () => {
-
-    puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
-    const page = await browser.newPage();
-    await page.goto(url);
-    const html = await page.content();
-    await browser.close();
-    console.log(html);
-    if (html) {
-      
-      const $ = cheerio.load(html);
-      
-     // noiVinsmoke($);
-      console.log('Yes, has html');
-    
-    //  await browser.close();
-    } else {
-
-      await browser.close();
-    }
-    return html;
-})
-    }
-
-    scrape().then((value) => {
-      console.log(value); // Success!
-  });
+function getContent() {
   
-}
+    puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
+      return 'Yes, has html';
+      const page = await browser.newPage();
+  
+      await page.setDefaultNavigationTimeout(0);
+  
+      // --- start log error --- //
+      // var theTempValue;
+      // page.on('error', async function (err) {
+      //   theTempValue = err.toString();
+      //   await another.nvsOpenAndAppendFile('log.html', 'Main error: ' + theTempValue + '<br>\n');
+      // });
+      // --- end log error --- //
+  
+      await page.goto(url);
+  
+      const html = await page.content();
+     // console.log(html);
+      
+     console.log(html);
+  
+      if (html) {
+        
+        
+        const $ = cheerio.load(html);
+        
+       // noiVinsmoke($);
+  
+        /*
+        const diff = process.hrtime(time);
+        // const nano = diff[0] * NS_PER_SEC + diff[1];
+        const milli = (diff[0] * NS_PER_SEC + diff[1])  * MS_PER_NS;
+        const totalTime = await another.nvsMillisToMinutesAndSeconds(milli);
+        console.log(totalTime);
+        */
+      
+        await browser.close();
+      } else {
+        /*
+        const diff = process.hrtime(time);
+        // const nano = diff[0] * NS_PER_SEC + diff[1];
+        const milli = (diff[0] * NS_PER_SEC + diff[1])  * MS_PER_NS;
+        const totalTime = await another.nvsMillisToMinutesAndSeconds(milli);
+        console.log(totalTime);
+        */
+  
+        await browser.close();
+      }
+    })
+      .catch(async (err) => {
+        // console.log(err);
+        const createdAt = another.createdAt();
+        await another.nvsOpenAndAppendFile('log.html', createdAt + ' : Main puppeteer.launch error : ' + err.message + '<br>\n');
+  
+        connection.end();
+        process.exit();
+      });
+  }
 
 
 

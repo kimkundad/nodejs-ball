@@ -60,6 +60,7 @@ connection.connect(async function (err) {
           } else {
             if (result.length == 0) {
              // getContent();
+             console.log('getContent2');
               getContent2();
             } else {
              // connection.end();

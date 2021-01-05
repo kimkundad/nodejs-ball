@@ -23,7 +23,7 @@ const MS_PER_NS = 1e-6;
 const time = process.hrtime();
 
 var hostName = 'beer789.com';
-var url = 'http://www.playsbo.com/euro/football/2021-01-05';
+var url = 'http://www.beer789.com/euro/football';
 
 var connection = mysql.createConnection({
   host: dbObject.database.host_name,

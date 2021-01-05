@@ -86,7 +86,7 @@ connection.connect(async function (err) {
 });
 
 function getContent2() {
-  console.log('Yes, has html');
+ // console.log('Yes, has html');
   let scrape = async () => {
 
     const browser = await puppeteer.launch({args: ['--no-sandbox']});
@@ -94,9 +94,8 @@ function getContent2() {
     await page.goto(url);
     const html = await page.content();
     await browser.close();
-    
+    console.log(html);
     if (html) {
-      console.log('Yes, has html');
       
       const $ = cheerio.load(html);
       

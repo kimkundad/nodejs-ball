@@ -63,14 +63,14 @@ connection.connect(async function (err) {
              console.log('getContent2');
               getContent2();
             } else {
-              connection.end();
-              process.exit();
+             // connection.end();
+             // process.exit();
             }
           }
         });
       } else {
-        connection.end();
-        process.exit();
+       // connection.end();
+       // process.exit();
       }
     });
     reqOne.end();
@@ -78,8 +78,8 @@ connection.connect(async function (err) {
     reqOne.on('timeout', () => {
       // reqOne.abort();
 
-      connection.end();
-      process.exit();
+     // connection.end();
+    //  process.exit();
     });
     // ----- end check host ----- //
   }

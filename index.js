@@ -14,8 +14,6 @@ const app = express()
 
 var port    = process.env.PORT || 3000;
 
-
-
 class MyEmitter extends EventEmitter { }
 const myEmitter = new MyEmitter();
 myEmitter.setMaxListeners(15);
@@ -25,7 +23,7 @@ const MS_PER_NS = 1e-6;
 const time = process.hrtime();
 
 var hostName = 'beer789.com';
-var url = 'http://www.beer789.com/euro/football';
+var url = 'http://www.beer789.com/euro/football/2021-01-05';
 
 var connection = mysql.createConnection({
   host: dbObject.database.host_name,
@@ -35,7 +33,6 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(async function (err) {
-  console.log('Yes, has html');
   if (err) {
     const createdAt = another.createdAt();
     await another.nvsOpenAndAppendFile('log.html', createdAt + ' : Main error: Cannot connect DB : ' + err.message + '<br>\n');
@@ -60,17 +57,16 @@ connection.connect(async function (err) {
           } else {
             if (result.length == 0) {
              // getContent();
-             console.log('getContent2');
               getContent2();
             } else {
-             // connection.end();
-             // process.exit();
+              connection.end();
+              process.exit();
             }
           }
         });
       } else {
-       // connection.end();
-       // process.exit();
+        connection.end();
+        process.exit();
       }
     });
     reqOne.end();
@@ -86,7 +82,7 @@ connection.connect(async function (err) {
 });
 
 function getContent2() {
- // console.log('Yes, has html');
+
   let scrape = async () => {
 
     const browser = await puppeteer.launch({args: ['--no-sandbox']});
@@ -94,15 +90,15 @@ function getContent2() {
     await page.goto(url);
     const html = await page.content();
     await browser.close();
-    console.log(html);
+
     if (html) {
+      console.log('Yes, has html');
       
       const $ = cheerio.load(html);
       
       noiVinsmoke($);
-      console.log('Yes, has html');
     
-    //  await browser.close();
+      await browser.close();
     } else {
 
       await browser.close();
@@ -120,6 +116,8 @@ function getContent2() {
 
 // --- start get content --- //
 function getContent() {
+
+  
   
   puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
     return 'Yes, has html';

@@ -35,6 +35,7 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(async function (err) {
+  console.log('Yes, has html');
   if (err) {
     const createdAt = another.createdAt();
     await another.nvsOpenAndAppendFile('log.html', createdAt + ' : Main error: Cannot connect DB : ' + err.message + '<br>\n');

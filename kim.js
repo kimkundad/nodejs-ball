@@ -38,7 +38,7 @@ connection.connect(async function (err) {
 function getContent() {
   
     puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
-      return 'Yes, has html';
+    
       const page = await browser.newPage();
   
       await page.setDefaultNavigationTimeout(0);

@@ -11,7 +11,7 @@ var dbObject = require('./config.json');
 
 const express = require('express')
 const app = express()
-
+const axios = require('axios');
 var port    = process.env.PORT || 3000;
 
 class MyEmitter extends EventEmitter { }
@@ -32,7 +32,22 @@ var connection = mysql.createConnection({
   password: dbObject.database.db_password
 });
 
+
+
 connection.connect(async function (err) {
+
+  var sql_ffp_list = "DELETE FROM ffp_list WHERE scraping_status = '0'";
+connection.query(sql_ffp_list, function (err, result) {
+    if (err) throw err;
+    console.log("Number of records deleted: " + result.affectedRows);
+  });
+
+  var sql_ffp_d = "DELETE FROM ffp_detail ";
+  connection.query(sql_ffp_d, function (err, result) {
+    if (err) throw err;
+    console.log("Number of records deleted: " + result.affectedRows);
+  });
+
   if (err) {
     const createdAt = another.createdAt();
     await another.nvsOpenAndAppendFile('log.html', createdAt + ' : Main error: Cannot connect DB : ' + err.message + '<br>\n');
@@ -46,7 +61,7 @@ connection.connect(async function (err) {
 
       if (sttCodeOne > 0 && sttCodeOne < 400) {
         // find scraping_status 0
-        var sqlFDir = "SELECT dir_name, created_at FROM ffp_list WHERE scraping_status='0' ORDER BY dir_name DESC LIMIT 1";
+        var sqlFDir = "SELECT dir_name, created_at FROM ffp_list WHERE scraping_status='1' ORDER BY dir_name DESC LIMIT 1";
         connection.query(sqlFDir, async (err, result, fields) => {
           if (err) {
             const createdAt = another.createdAt();
@@ -56,8 +71,9 @@ connection.connect(async function (err) {
            // process.exit();
           } else {
             if (result.length == 0) {
-             // getContent();
+             
               getContent2();
+              
             } else {
               connection.end();
               process.exit();
@@ -103,11 +119,11 @@ function getContent2() {
 
       await browser.close();
     }
-    return html;
+   // return html;
     
     }
     scrape().then((value) => {
-      console.log(value); // Success!
+     // console.log(value); // Success!
   });
   
 }
@@ -120,7 +136,7 @@ function getContent() {
   
   
   puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => {
-    return 'Yes, has html';
+   // return 'Yes, has html';
     const page = await browser.newPage();
 
     await page.setDefaultNavigationTimeout(0);
@@ -141,29 +157,17 @@ function getContent() {
     res.json(html)
 
     if (html) {
-      console.log('Yes, has html');
+     // console.log('Yes, has html');
       
       const $ = cheerio.load(html);
       
       noiVinsmoke($);
 
-      /*
-      const diff = process.hrtime(time);
-      // const nano = diff[0] * NS_PER_SEC + diff[1];
-      const milli = (diff[0] * NS_PER_SEC + diff[1])  * MS_PER_NS;
-      const totalTime = await another.nvsMillisToMinutesAndSeconds(milli);
-      console.log(totalTime);
-      */
+   
     
       await browser.close();
     } else {
-      /*
-      const diff = process.hrtime(time);
-      // const nano = diff[0] * NS_PER_SEC + diff[1];
-      const milli = (diff[0] * NS_PER_SEC + diff[1])  * MS_PER_NS;
-      const totalTime = await another.nvsMillisToMinutesAndSeconds(milli);
-      console.log(totalTime);
-      */
+ 
 
       await browser.close();
     }
@@ -288,6 +292,7 @@ async function noiVinsmoke($) {
 
   const dirName = another.createName();
   const createdAt = another.createdAt();
+
   var sql = "INSERT INTO ffp_list (dir_name, content, created_at) VALUES ('" + dirName + "', '" + structureString + "', '" + createdAt + "');";
 
   connection.query(sql, async (err, result) => {
@@ -322,7 +327,7 @@ async function noiVinsmoke($) {
           const id = ymd + '' + hm + '' + f; // 20041200217
         //   console.log(id);
 
-          sql = "('" + id + "', '" + code + "', '" + href + "', '" + dirName + "', '" + realFileName + "', '', '" + createdAt + "')";
+          sql = "('" + id + "', '" + code + "', '" + href + "', '" + dirName + "', '" + realFileName + "', '" + fData + "', '" + createdAt + "')";
           qStringInsert += (qStringInsert) ? ',' + sql : sql;
         }
       });
@@ -334,6 +339,9 @@ async function noiVinsmoke($) {
       if (qStringInsert != '') {
         // await another.nvsOpenAndAppendFile('log.html', createdAt + ' : Main Insert Detail info : ' + sqlInsert + '<br>\n');
 
+        
+
+
         connection.query(sqlInsert, async (err, result) => {
           if (err) {
             const createdAt = another.createdAt();
@@ -343,10 +351,22 @@ async function noiVinsmoke($) {
             process.exit();
           } else {
             // console.log(result);
+            const params = {
+              method: 'GET',
+              url: 'http://localhost/node-scraper-api/public/api/update_mysql'
+          };
+          
+          const data789 = await axios(params);
+          console.log(data789.data);
             connection.end();
             process.exit();
           }
+
+          
         });
+
+        
+        
       } else {
         // console.log(result);
         connection.end();
